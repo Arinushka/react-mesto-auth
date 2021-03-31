@@ -14,7 +14,7 @@ function Register(props) {
   function handlePassword(e) {
     setPassword(e.target.value);
   }
-  
+
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -22,9 +22,9 @@ function Register(props) {
       .then((res) => {
         if (res.statusCode !== 400) {
           props.history.push('/sign-in');
-          console.log ('идите нахуй')
         }
       })
+      .catch((err) => console.log(err));
   }
 
 

@@ -12,14 +12,14 @@ import Register from './Register';
 import { api } from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import InfoTooltip from './InfoTooltip';
 import successImage from '../images/success.svg';
 import failImage from '../images/fail.svg';
 import * as auth from '../utils/auth.js';
 
 
-function App() {
+function App(props) {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
@@ -174,6 +174,24 @@ function App() {
       })
   }
 
+  function handleTokenCheck() {
+    if (localStorage.getItem('token')) {
+      const token = localStorage.getItem('token');
+      auth.checkToken(token)
+        .then((res) => {
+          if (res) {
+            setLoggedIn(true);
+            props.history.push('/profile')
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+
+  React.useEffect(() => {
+    handleTokenCheck();
+  }, [])
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header />
@@ -192,7 +210,7 @@ function App() {
           isLoading={loading}
           loggedIn={loggedIn} />
         <Route exact path="/sign-in">
-          <Login />
+          <Login onLoggedIn={setLoggedIn} />
         </Route>
         <Route exact path="/sign-up">
           <Register />
@@ -201,7 +219,7 @@ function App() {
           {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-up" />}
         </Route>
       </Switch>
-     {loggedIn && <Footer />}
+      {loggedIn && <Footer />}
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
@@ -246,15 +264,15 @@ function App() {
       <InfoTooltip
         src={successImage}
         title="Вы успешно зарегистрировались!"
-        isOpen={false}/>
-        <InfoTooltip
+        isOpen={false} />
+      <InfoTooltip
         src={failImage}
         title="Что-то пошло не так!
         Попробуйте ещё раз."
-        isOpen={false}/>
+        isOpen={false} />
     </CurrentUserContext.Provider>
   );
 
 }
 
-export default App;
+export default withRouter(App);
