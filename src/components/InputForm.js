@@ -8,12 +8,12 @@ function InputForm(props) {
 
   function handleChange(e) {
     props.onChange(e);
-    if (e.target.value.trim().length < 2 && e.target.validationMessage === '') {
-      setError('Слово должно содержать как минимум 2 символа помимо пробелов.');
+    // if (e.target.value.trim().length < 2 && e.target.validationMessage === '') {
+    //   setError('Слово должно содержать как минимум 2 символа помимо пробелов.');
 
-    } else {
-      setError(e.target.validationMessage);
-    }
+    // } else {
+    //   setError(e.target.validationMessage);
+    // }
   }
 
   React.useEffect(() => {

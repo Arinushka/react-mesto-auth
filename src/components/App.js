@@ -16,6 +16,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import InfoTooltip from './InfoTooltip';
 import successImage from '../images/success.svg';
 import failImage from '../images/fail.svg';
+import * as auth from '../utils/auth.js';
 
 
 function App() {
@@ -250,7 +251,7 @@ function App() {
         src={failImage}
         title="Что-то пошло не так!
         Попробуйте ещё раз."
-        isOpen={true}/>
+        isOpen={false}/>
     </CurrentUserContext.Provider>
   );
 
