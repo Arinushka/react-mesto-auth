@@ -39,6 +39,10 @@ function App(props) {
   const [isButtonAddPlace, setIsButtonAddPlace] = React.useState(false);
   const [isButtonAvatar, setIsButtonAvatar] = React.useState(false);
 
+  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = React.useState(false);
+  const [isFailPopupOpen, setIsFailPopupOpen] = React.useState(false);
+  const [isAuth, setIsAuth] = React.useState(true);
+
   function handleButton(isLoad, buttonTitle, setState) {
     setState({ isLoad: isLoad, buttonTitle: buttonTitle })
   }
@@ -53,12 +57,22 @@ function App(props) {
     setIsEditAvatarPopupOpen(true);
   }
 
+  function handleSuccessPopupClick(){
+    setIsSuccessPopupOpen(true);
+  }
+
+  function handleFailPopupClick(){
+    setIsFailPopupOpen(true);
+  }
+
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsDeletePopupOpen(false);
     setIsPopupWithImageOpen(false);
+    setIsFailPopupOpen(false);
+    setIsSuccessPopupOpen(false);
     document.removeEventListener('keydown', escClose);
   }
   function escClose(evt) {
@@ -188,13 +202,19 @@ function App(props) {
     }
   }
 
+  function handleLink(){
+    setIsAuth(!isAuth);
+  }
+
   React.useEffect(() => {
-    handleTokenCheck();
+    // handleTokenCheck();
   }, [])
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header />
+      <Header 
+        handleLink={handleLink}
+        isAuth={isAuth}/>
       <Switch>
         <ProtectedRoute
           path="/profile"
@@ -210,13 +230,18 @@ function App(props) {
           isLoading={loading}
           loggedIn={loggedIn} />
         <Route exact path="/sign-in">
-          <Login onLoggedIn={setLoggedIn} />
+          <Login
+            onLoggedIn={setLoggedIn} 
+            onFail={handleFailPopupClick}/>
         </Route>
         <Route exact path="/sign-up">
-          <Register />
+          <Register
+            isAuth={isAuth}
+            handleLink={handleLink}
+            onSuccess={handleSuccessPopupClick}/>
         </Route>
         <Route exact path='/'>
-          {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-up" />}
+          {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
         </Route>
       </Switch>
       {loggedIn && <Footer />}
@@ -262,14 +287,20 @@ function App(props) {
         escClose={handleEscClose}
         overlayClose={handleOverlayClose} />
       <InfoTooltip
+        isOpen={isSuccessPopupOpen}
+        onClose={closeAllPopups}
+        escClose={handleEscClose}
+        overlayClose={handleOverlayClose}
         src={successImage}
-        title="Вы успешно зарегистрировались!"
-        isOpen={false} />
+        title="Вы успешно зарегистрировались!"/>
       <InfoTooltip
+        isOpen={isFailPopupOpen}
+        onClose={closeAllPopups}
+        escClose={handleEscClose}
+        overlayClose={handleOverlayClose}
         src={failImage}
         title="Что-то пошло не так!
-        Попробуйте ещё раз."
-        isOpen={false} />
+        Попробуйте ещё раз." />
     </CurrentUserContext.Provider>
   );
 

@@ -21,12 +21,16 @@ function Register(props) {
     auth.register(email, password)
       .then((res) => {
         if (res.statusCode !== 400) {
+          props.onSuccess();
           props.history.push('/sign-in');
         }
       })
       .catch((err) => console.log(err));
   }
 
+ React.useEffect(()=>{
+   if(props.isAuth) props.handleLink()
+ }, [])
 
   return (
     <div className="passp-content">
@@ -34,9 +38,9 @@ function Register(props) {
         <h2 className="passp-content__title">Регистрация</h2>
         <InputForm onChange={handleEmail} value={email} className="passp-content__input" placeholder="Email" type="email"></InputForm>
         <InputForm onChange={handlePassword} value={password} className="passp-content__input" placeholder="Пароль" type="password"></InputForm>
-        <button className="passp-content__button-submit">Зарегистрироваться</button>
+        <button className="passp-content__button-submit" >Зарегистрироваться</button>
       </form>
-      <p className="passp-content__check">Уже зарегистрированы? <Link to="sign-in" className="passp-content__link" href="#">Войти</Link></p>
+      <p className="passp-content__check">Уже зарегистрированы? <Link to="sign-in" onClick={props.handleLink} className="passp-content__link" href="#">Войти</Link></p>
     </div>
   );
 }

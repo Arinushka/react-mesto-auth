@@ -22,12 +22,16 @@ function Login(props) {
     e.preventDefault();
     auth.authorize(email, password)
       .then((res) => {
-        if (res) {
+        if (res.statusCode !== 401) {
           props.onLoggedIn(true);
           props.history.push('/profile');
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        props.onFail();
+        console.log(err)
+      }
+      );
   }
   return (
     <div className="passp-content" >

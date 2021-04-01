@@ -8,12 +8,14 @@ export const register = (email, password) => {
     },
     body: JSON.stringify({ email, password })
   })
-    .then((response) => {
-      return response.json();
-    })
-    .then((res) => {
-      return res;
-    })
+  .then(res => {
+    if (!res.ok){
+      return Promise.reject(res.status)
+    } else{
+      console.log(res)
+      return res.json();
+    }
+  })
     .catch((err) => console.log(err));
 };
 
@@ -25,11 +27,20 @@ export const authorize = (email, password) => {
     },
     body: JSON.stringify({ email, password })
   })
-    .then((response => response.json()))
+  .then(res => {
+    if (!res.ok){
+      return Promise.reject(res.status)
+    } else{
+      console.log(res)
+      return res.json();
+    }
+  })
     .then((data) => {
       if (data) {
         localStorage.setItem('token', data.token);
         return data;
+      }else {
+        return;
       }
     })
     .catch(err => console.log(err))

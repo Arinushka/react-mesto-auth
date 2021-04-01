@@ -1,6 +1,11 @@
 import React from 'react';
 
 function InfoTooltip(props) {
+
+  React.useEffect(() => {
+    props.escClose(props.isOpen);
+  }, [props.isOpen, props.escClose])
+
   return (
     <div className={`popup ${props.isOpen && 'popup_opened'}`} onClick={props.overlayClose}>
       <form className="popup__container popup__notification" name="popup_notification">
