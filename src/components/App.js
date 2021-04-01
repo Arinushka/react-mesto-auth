@@ -198,6 +198,7 @@ function App(props) {
           if (res) {
             setLoggedIn(true);
             props.history.push('/')
+            setEmail(res.data.email);
           }
         })
         .catch((err) => console.log(err));
@@ -221,7 +222,8 @@ function App(props) {
         onExit={setExit}
         email={email}
         handleLink={handleLink}
-        isAuth={isAuth} />
+        isAuth={isAuth} 
+        loggedIn={loggedIn}/>
       <Switch>
         <ProtectedRoute
           exact = 'exact'

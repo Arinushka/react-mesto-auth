@@ -13,8 +13,8 @@ function Header(props) {
     props.onExit(false);
     props.removeEmail('');
     props.isLoggedIn(false);
+    console.log(props.loggedIn);
   }
-
 
   function changeOfState() {
     if (props.isExit) {
@@ -33,17 +33,24 @@ function Header(props) {
   }
 
   React.useEffect(() => {
-   
     changeOfState();
   }, [props.isExit, props.isAuth])
 
+  React.useEffect(()=>{
+    if (props.loggedIn) props.onExit(true)
+  }, [props.loggedIn])
 
   return (
     <header className="header">
       <div className="header__logo"></div>
       <div className="header__wrapper">
         <p className="header__email">{props.email}</p>
-        <Link to={(props.isAuth && !props.isExit) ? (props.isAuth ? '/sign-up' : '/sign-in') : '/sign-in'} onClick={handleState} className="header__link" href="#">{linkState}</Link>
+        <Link
+          to={(props.isAuth && !props.isExit) ? (props.isAuth ? '/sign-up' : '/sign-in') : '/sign-in'}
+          onClick={handleState}
+          className={`header__link ${props.isExit && 'header__link_exit'}`}
+          href="#">{linkState}
+        </Link>
       </div>
     </header>
   );
