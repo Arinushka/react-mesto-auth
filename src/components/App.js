@@ -215,6 +215,8 @@ function App(props) {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header
+        removeEmail={setEmail}
+        isLoggedIn={setLoggedIn}
         isExit={exit}
         onExit={setExit}
         email={email}
