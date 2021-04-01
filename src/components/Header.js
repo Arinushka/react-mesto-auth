@@ -43,7 +43,7 @@ function Header(props) {
       <div className="header__logo"></div>
       <div className="header__wrapper">
         <p className="header__email">{props.email}</p>
-        <Link to={props.isAuth ? '/sign-up' : '/sign-in'} onClick={handleState} className="header__link" href="#">{linkState}</Link>
+        <Link to={(props.isAuth && !props.isExit) ? (props.isAuth ? '/sign-up' : '/sign-in') : '/sign-in'} onClick={handleState} className="header__link" href="#">{linkState}</Link>
       </div>
     </header>
   );

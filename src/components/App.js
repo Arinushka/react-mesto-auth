@@ -197,7 +197,7 @@ function App(props) {
         .then((res) => {
           if (res) {
             setLoggedIn(true);
-            props.history.push('/profile')
+            props.history.push('/')
           }
         })
         .catch((err) => console.log(err));
@@ -209,7 +209,7 @@ function App(props) {
   }
 
   React.useEffect(() => {
-    // handleTokenCheck();
+    handleTokenCheck();
   }, [])
 
   return (
@@ -224,7 +224,8 @@ function App(props) {
         isAuth={isAuth} />
       <Switch>
         <ProtectedRoute
-          path="/profile"
+          exact = 'exact'
+          path="/"
           component={Main}
           onEditAvatar={handleEditAvatarClick}
           onEditProfile={handleEditProfileClick}
@@ -249,7 +250,7 @@ function App(props) {
             handleLink={handleLink}
             onSuccess={handleSuccessPopupClick} />
         </Route>
-        <Route exact path='/'>
+        <Route >
           {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
         </Route>
       </Switch>
