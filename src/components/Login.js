@@ -23,7 +23,9 @@ function Login(props) {
     auth.authorize(email, password)
       .then((res) => {
         if (res.statusCode !== 401) {
+          props.setEmail(email);
           props.onLoggedIn(true);
+          props.onExit(true);
           props.history.push('/profile');
         }
       })

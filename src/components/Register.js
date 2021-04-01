@@ -28,9 +28,9 @@ function Register(props) {
       .catch((err) => console.log(err));
   }
 
- React.useEffect(()=>{
-   if(props.isAuth) props.handleLink()
- }, [])
+  React.useEffect(() => {
+    if (props.isAuth) props.handleLink()
+  }, [])
 
   return (
     <div className="passp-content">

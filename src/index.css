@@ -61,3 +61,4 @@
 @import url(./blocks/popup/__image-notification/popup__image-notification.css);
 @import url(./blocks/popup/__notification/popup__notification.css);
 @import url(./blocks/popup/__title-notification/popup__title-notification.css);
+@import url(./blocks/header/__link/_exit/header__link_exit.css);

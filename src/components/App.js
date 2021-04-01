@@ -42,6 +42,8 @@ function App(props) {
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = React.useState(false);
   const [isFailPopupOpen, setIsFailPopupOpen] = React.useState(false);
   const [isAuth, setIsAuth] = React.useState(true);
+  const [exit, setExit] = React.useState(false);
+  const [email, setEmail] = React.useState('');
 
   function handleButton(isLoad, buttonTitle, setState) {
     setState({ isLoad: isLoad, buttonTitle: buttonTitle })
@@ -57,11 +59,11 @@ function App(props) {
     setIsEditAvatarPopupOpen(true);
   }
 
-  function handleSuccessPopupClick(){
+  function handleSuccessPopupClick() {
     setIsSuccessPopupOpen(true);
   }
 
-  function handleFailPopupClick(){
+  function handleFailPopupClick() {
     setIsFailPopupOpen(true);
   }
 
@@ -202,7 +204,7 @@ function App(props) {
     }
   }
 
-  function handleLink(){
+  function handleLink() {
     setIsAuth(!isAuth);
   }
 
@@ -212,9 +214,12 @@ function App(props) {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header 
+      <Header
+        isExit={exit}
+        onExit={setExit}
+        email={email}
         handleLink={handleLink}
-        isAuth={isAuth}/>
+        isAuth={isAuth} />
       <Switch>
         <ProtectedRoute
           path="/profile"
@@ -231,14 +236,16 @@ function App(props) {
           loggedIn={loggedIn} />
         <Route exact path="/sign-in">
           <Login
-            onLoggedIn={setLoggedIn} 
-            onFail={handleFailPopupClick}/>
+            onExit={setExit}
+            setEmail={setEmail}
+            onLoggedIn={setLoggedIn}
+            onFail={handleFailPopupClick} />
         </Route>
         <Route exact path="/sign-up">
           <Register
             isAuth={isAuth}
             handleLink={handleLink}
-            onSuccess={handleSuccessPopupClick}/>
+            onSuccess={handleSuccessPopupClick} />
         </Route>
         <Route exact path='/'>
           {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
@@ -292,7 +299,7 @@ function App(props) {
         escClose={handleEscClose}
         overlayClose={handleOverlayClose}
         src={successImage}
-        title="Вы успешно зарегистрировались!"/>
+        title="Вы успешно зарегистрировались!" />
       <InfoTooltip
         isOpen={isFailPopupOpen}
         onClose={closeAllPopups}
