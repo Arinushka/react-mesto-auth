@@ -7,3 +7,22 @@
   width: 358px;
   color: #fff;
 }
+
+
+@media screen and (max-width: 1024px) {
+  .passp-content__input {
+    width: 325px;
+  }
+}
+    
+ @media screen and (max-width: 768px) {
+  .passp-content__input {
+    width: 300px;
+  }
+}
+    
+@media screen and (max-width: 450px) {
+  .passp-content__input {
+    width: 260px;
+  }
+}

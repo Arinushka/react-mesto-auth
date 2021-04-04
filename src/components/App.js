@@ -44,6 +44,7 @@ function App(props) {
   const [isAuth, setIsAuth] = React.useState(true);
   const [exit, setExit] = React.useState(false);
   const [email, setEmail] = React.useState('');
+  
 
   function handleButton(isLoad, buttonTitle, setState) {
     setState({ isLoad: isLoad, buttonTitle: buttonTitle })
@@ -204,7 +205,7 @@ function App(props) {
         .catch((err) => console.log(err));
     }
   }
-
+ 
   function handleLink() {
     setIsAuth(!isAuth);
   }
@@ -213,17 +214,18 @@ function App(props) {
     handleTokenCheck();
   }, [])
 
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header
-        removeEmail={setEmail}
-        isLoggedIn={setLoggedIn}
-        isExit={exit}
-        onExit={setExit}
-        email={email}
-        handleLink={handleLink}
-        isAuth={isAuth} 
-        loggedIn={loggedIn}/>
+       removeEmail={setEmail}
+       isLoggedIn={setLoggedIn}
+       isExit={exit}
+       onExit={setExit}
+       email={email}
+       handleLink={handleLink}
+       isAuth={isAuth} 
+       loggedIn={loggedIn}/>
       <Switch>
         <ProtectedRoute
           exact = 'exact'
@@ -252,7 +254,7 @@ function App(props) {
             handleLink={handleLink}
             onSuccess={handleSuccessPopupClick} />
         </Route>
-        <Route >
+        <Route>
           {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
         </Route>
       </Switch>

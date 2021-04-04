@@ -62,3 +62,11 @@
 @import url(./blocks/popup/__notification/popup__notification.css);
 @import url(./blocks/popup/__title-notification/popup__title-notification.css);
 @import url(./blocks/header/__link/_exit/header__link_exit.css);
+@import url(./blocks/header/__menu/header__menu.css);
+@import url(./blocks/header/__wrapper/_hamburger/header__wrapper_hamburger.css);
+@import url(./blocks/header/__email/_hamburger/header__email_hamburger.css);
+@import url(./blocks/header/__hamburger/header__hamburger.css);
+@import url(./blocks/header/__desktop/header__desktop.css);
+@import url(./blocks/header/__wrapper/_hidden/header__wrapper_hidden.css);
+@import url(./blocks/header/__wrapper/_visible/header__wrapper_visible.css);
+@import url(./blocks/header/__menu/_exit/header__menu_exit.css);

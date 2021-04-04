@@ -5,3 +5,9 @@
   align-items: center;
   margin: 60px auto 0 auto;
 }
+
+@media screen and (max-width: 450px) {
+  .passp-content{
+    max-width: 320px;
+  }
+}
