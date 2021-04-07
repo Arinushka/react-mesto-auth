@@ -50,17 +50,14 @@ function App(props) {
   });
 
   const [loggedIn, setLoggedIn] = React.useState(false);
-
   const [isButtonEdditProfile, setIsButtonEdditProfile] = React.useState(false);
   const [isButtonAddPlace, setIsButtonAddPlace] = React.useState(false);
   const [isButtonAvatar, setIsButtonAvatar] = React.useState(false);
-
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = React.useState(false);
   const [isFailPopupOpen, setIsFailPopupOpen] = React.useState(false);
   const [isAuth, setIsAuth] = React.useState(true);
   const [exit, setExit] = React.useState(false);
   const [email, setEmail] = React.useState("");
-
   const [hamburger, setHamburger] = React.useState(false);
 
   function handleButton(isLoad, buttonTitle, setState) {
@@ -130,21 +127,13 @@ function App(props) {
   }
 
   React.useEffect(() => {
-    api
-      .getUserInfo()
-      .then((data) => {
-        setCurrentUser(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
     setLoading(true);
-    api
-      .getInitialCards()
-      .then((data) => {
-        setCards(data);
-        console.log(data);
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([userInfo, cardList]) => {
+        setCurrentUser(userInfo);
+        setCards(cardList);
         setLoading(false);
+        console.log(cardList, userInfo);
       })
       .catch((err) => {
         console.log(err);
@@ -153,8 +142,7 @@ function App(props) {
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
-    api
-      .changeLikeCardStatus(card._id, !isLiked)
+    api.changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
         setCards((state) =>
           state.map((c) => (c._id === card._id ? newCard : c))
@@ -167,8 +155,7 @@ function App(props) {
 
   function handleCardDelete(card) {
     handleButton(true, "Удаление...", setButtonDelete);
-    api
-      .deleteCard(card._id)
+    api.deleteCard(card._id)
       .then(() => {
         handleButton(false, "Да", setButtonDelete);
         setCards((state) => state.filter((item) => item._id !== card._id));
@@ -180,8 +167,7 @@ function App(props) {
 
   function handleUpdateUser({ name, about }) {
     handleButton(true, "Сохранение...", setButtonSave);
-    api
-      .setUserInfo(name, about)
+    api.setUserInfo(name, about)
       .then((data) => {
         setCurrentUser(data);
         handleButton(false, "Сохранить", setButtonSave);
@@ -194,8 +180,7 @@ function App(props) {
 
   function handleUpdateAvatar({ avatar }) {
     handleButton(true, "Сохранение...", setButtonSave);
-    api
-      .updateAvatarImage(avatar)
+    api.updateAvatarImage(avatar)
       .then((data) => {
         setCurrentUser(data);
         handleButton(false, "Сохранить", setButtonSave);
@@ -208,8 +193,7 @@ function App(props) {
 
   function handleAddPlace({ name, link }) {
     handleButton(true, "Создание...", setButtonAdd);
-    api
-      .addCard(name, link)
+    api.addCard(name, link)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         handleButton(false, "Создать", setButtonAdd);
@@ -223,8 +207,7 @@ function App(props) {
   function handleTokenCheck() {
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
-      auth
-        .checkToken(token)
+      auth.checkToken(token)
         .then((res) => {
           if (res) {
             setLoggedIn(true);
@@ -232,7 +215,10 @@ function App(props) {
             setEmail(res.data.email);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          localStorage.removeItem('token');
+          console.log(err)
+        });
     }
   }
 
@@ -240,7 +226,7 @@ function App(props) {
     setIsAuth(!isAuth);
   }
 
-  function handleLogin(email, password){
+  function handleLogin(email, password) {
     auth.authorize(email, password)
       .then((res) => {
         localStorage.setItem('token', res.token);
@@ -256,20 +242,20 @@ function App(props) {
       );
   }
 
-  function handleRegister(email, password){
+  function handleRegister(email, password) {
     auth.register(email, password)
-    .then((res) => {
-      handleSuccessPopupClick();
-      props.history.push('/sign-in');
-    })
-    .catch((err) =>{ 
-      handleFailPopupClick();
-      console.log(err)
-    }
-    );
+      .then((res) => {
+        handleSuccessPopupClick();
+        props.history.push('/sign-in');
+      })
+      .catch((err) => {
+        handleFailPopupClick();
+        console.log(err)
+      }
+      );
   }
 
-  function handleSignOut(){
+  function handleSignOut() {
     localStorage.removeItem('token');
     props.history.push('/sign-in');
     setExit(false);
@@ -294,8 +280,7 @@ function App(props) {
         handleLink={handleLink}
         isAuth={isAuth}
         loggedIn={loggedIn}
-        onSignIn={handleSignOut}
-      />
+        onSignIn={handleSignOut} />
       <Switch>
         <ProtectedRoute
           exact="exact"
@@ -310,19 +295,16 @@ function App(props) {
           onCardLike={handleCardLike}
           onCardDelete={handleDeleteCard}
           isLoading={loading}
-          loggedIn={loggedIn}
-        />
+          loggedIn={loggedIn} />
         <Route exact path="/sign-in">
           <Login
-            onLogin={handleLogin}
-          />
+            onLogin={handleLogin} />
         </Route>
         <Route exact path="/sign-up">
           <Register
             onRegister={handleRegister}
             isAuth={isAuth}
-            handleLink={handleLink}
-          />
+            handleLink={handleLink} />
         </Route>
         <Route>
           {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
@@ -337,8 +319,7 @@ function App(props) {
         onUpdateUser={handleUpdateUser}
         buttonTitle={buttonSave}
         isButtonActive={isButtonEdditProfile}
-        onButtonActive={setIsButtonEdditProfile}
-      />
+        onButtonActive={setIsButtonEdditProfile} />
       <AddPlacePopup
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
@@ -347,8 +328,7 @@ function App(props) {
         onAddPlace={handleAddPlace}
         buttonTitle={buttonAdd}
         isButtonActive={isButtonAddPlace}
-        onButtonActive={setIsButtonAddPlace}
-      />
+        onButtonActive={setIsButtonAddPlace} />
       <EditAvatarPopup
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
@@ -357,8 +337,7 @@ function App(props) {
         onUpdateAvatar={handleUpdateAvatar}
         buttonTitle={buttonSave}
         isButtonActive={isButtonAvatar}
-        onButtonActive={setIsButtonAvatar}
-      />
+        onButtonActive={setIsButtonAvatar} />
       <DeletePopup
         card={selectedCard}
         isOpen={isDeletePopupOpen}
@@ -366,32 +345,27 @@ function App(props) {
         escClose={handleEscClose}
         overlayClose={handleOverlayClose}
         onCardDelete={handleCardDelete}
-        buttonTitle={buttonDelete}
-      />
+        buttonTitle={buttonDelete} />
       <ImagePopup
         isOpen={isPopupWithImageOpen}
         card={selectedCard}
         onClose={closeAllPopups}
         escClose={handleEscClose}
-        overlayClose={handleOverlayClose}
-      />
+        overlayClose={handleOverlayClose} />
       <InfoTooltip
         isOpen={isSuccessPopupOpen}
         onClose={closeAllPopups}
         escClose={handleEscClose}
         overlayClose={handleOverlayClose}
         src={successImage}
-        title="Вы успешно зарегистрировались!"
-      />
+        title="Вы успешно зарегистрировались!" />
       <InfoTooltip
         isOpen={isFailPopupOpen}
         onClose={closeAllPopups}
         escClose={handleEscClose}
         overlayClose={handleOverlayClose}
         src={failImage}
-        title="Что-то пошло не так!
-    Попробуйте ещё раз."
-      />
+        title="Что-то пошло не так!Попробуйте ещё раз." />
     </CurrentUserContext.Provider>
   );
 }

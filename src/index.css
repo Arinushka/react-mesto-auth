@@ -71,3 +71,4 @@
 @import url(./blocks/header/__wrapper/_visible/header__wrapper_visible.css);
 @import url(./blocks/header/__menu/_exit/header__menu_exit.css);
 @import url(./blocks/header/__desktop/_visible/header__desktop_visible.css);
+@import url(./blocks/popup/__input/_wrapper/popup__input_wrapper.css);

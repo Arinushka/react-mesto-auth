@@ -1,14 +1,10 @@
 import React from 'react';
-import { Link, useHistory, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {Hamburger} from './Hamburger';
 
 function Header(props) {
 
-  
   const [linkState, setLinkState] = React.useState('');
-
-
-  const history = useHistory();
 
   function signOut() {
     props.onSignIn();
@@ -30,11 +26,10 @@ function Header(props) {
     }
   }
 
-
-
   function handleHamburger() {
     props.onHamburger(!props.isHamburger);
   }
+  
   React.useEffect(() => {
     changeOfState();
   }, [props.isExit, props.isAuth])
