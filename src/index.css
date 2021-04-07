@@ -70,3 +70,4 @@
 @import url(./blocks/header/__wrapper/_hidden/header__wrapper_hidden.css);
 @import url(./blocks/header/__wrapper/_visible/header__wrapper_visible.css);
 @import url(./blocks/header/__menu/_exit/header__menu_exit.css);
+@import url(./blocks/header/__desktop/_visible/header__desktop_visible.css);

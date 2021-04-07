@@ -2,3 +2,10 @@
   display: flex;
 }
 
+@media screen and (min-width: 720px) {
+  .header__wrapper_visible {
+    display: none;
+    
+  }
+}
+

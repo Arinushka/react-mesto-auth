@@ -1,23 +1,17 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import Hamburger from './Hamburger';
+import { Link, useHistory, withRouter } from 'react-router-dom';
+import {Hamburger} from './Hamburger';
 
 function Header(props) {
 
-  const [hamburger, setHamburger] = React.useState(false);
+  
   const [linkState, setLinkState] = React.useState('');
 
 
   const history = useHistory();
 
   function signOut() {
-    localStorage.removeItem('token');
-    history.push('/sign-in');
-    props.onExit(false);
-    props.removeEmail('');
-    props.isLoggedIn(false);
-    console.log(props.loggedIn);
-    setHamburger(false);
+    props.onSignIn();
   }
 
   function changeOfState() {
@@ -39,7 +33,7 @@ function Header(props) {
 
 
   function handleHamburger() {
-    setHamburger(!hamburger);
+    props.onHamburger(!props.isHamburger);
   }
   React.useEffect(() => {
     changeOfState();
@@ -55,12 +49,12 @@ function Header(props) {
         linkState={linkState}
         email={props.email}
         onSetHamburger={handleHamburger}
-        isHamburger={hamburger}
+        isHamburger={props.isHamburger}
         isExit={props.exit}
         isAuth={props.isAuth}
         onHandleState={handleState}
         loggedIn={props.loggedIn} />
-      <div className={`header__desktop ${!props.loggedIn && 'header__wrapper_visible'}`}>
+      <div className={`header__desktop ${!props.loggedIn && 'header__desktop_visible'}`}>
         <div className="header__logo"></div>
         <div className="header__wrapper">
           <p className="header__email">{props.email}</p>
@@ -76,4 +70,4 @@ function Header(props) {
   );
 }
 
-export default Header;
+export default withRouter(Header);

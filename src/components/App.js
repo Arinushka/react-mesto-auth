@@ -61,6 +61,8 @@ function App(props) {
   const [exit, setExit] = React.useState(false);
   const [email, setEmail] = React.useState("");
 
+  const [hamburger, setHamburger] = React.useState(false);
+
   function handleButton(isLoad, buttonTitle, setState) {
     setState({ isLoad: isLoad, buttonTitle: buttonTitle });
   }
@@ -267,6 +269,16 @@ function App(props) {
     );
   }
 
+  function handleSignOut(){
+    localStorage.removeItem('token');
+    props.history.push('/sign-in');
+    setExit(false);
+    setEmail('');
+    setLoggedIn(false);
+    console.log(props.loggedIn);
+    setHamburger(false);
+  }
+
   React.useEffect(() => {
     handleTokenCheck();
   }, []);
@@ -274,14 +286,15 @@ function App(props) {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header
-        removeEmail={setEmail}
-        isLoggedIn={setLoggedIn}
+        isHamburger={hamburger}
+        onHamburger={setHamburger}
         isExit={exit}
         onExit={setExit}
         email={email}
         handleLink={handleLink}
         isAuth={isAuth}
         loggedIn={loggedIn}
+        onSignIn={handleSignOut}
       />
       <Switch>
         <ProtectedRoute
