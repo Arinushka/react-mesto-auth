@@ -1,6 +1,5 @@
 import React from 'react';
 import InputForm from './InputForm';
-import * as auth from '../utils/auth.js';
 import { Link, withRouter } from 'react-router-dom';
 
 function Register(props) {
@@ -15,17 +14,9 @@ function Register(props) {
     setPassword(e.target.value);
   }
 
-
   function handleSubmit(e) {
     e.preventDefault();
-    auth.register(email, password)
-      .then((res) => {
-        if (res.statusCode !== 400) {
-          props.onSuccess();
-          props.history.push('/sign-in');
-        }
-      })
-      .catch((err) => console.log(err));
+    props.onRegister(email, password);
   }
 
   React.useEffect(() => {

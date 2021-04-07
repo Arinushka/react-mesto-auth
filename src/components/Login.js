@@ -1,8 +1,6 @@
 import React from 'react';
 import InputForm from './InputForm';
-import * as auth from '../utils/auth.js';
 import { withRouter } from 'react-router-dom';
-
 
 function Login(props) {
 
@@ -17,23 +15,10 @@ function Login(props) {
     setPassword(e.target.value);
   }
 
-
   function handleSubmit(e) {
     e.preventDefault();
-    auth.authorize(email, password)
-      .then((res) => {
-        if (res.statusCode !== 401) {
-          props.setEmail(email);
-          props.onLoggedIn(true);
-          props.onExit(true);
-          props.history.push('/');
-        }
-      })
-      .catch((err) => {
-        props.onFail();
-        console.log(err)
-      }
-      );
+    props.onLogin(email, password);
+
   }
   return (
     <div className="passp-content" >
