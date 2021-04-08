@@ -1,13 +1,16 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
- export const Hamburger = (props) => {
-	const classNameHamburger = `header__wrapper_hamburger header__wrapper_visible ${!props.loggedIn && 'header__wrapper_hidden'}`;
+export const Hamburger = (props) => {
+
+	const isHamburgerVisible = props.isHamburger && props.loggedIn;
+
 	return (
 		<>
-			{props.isHamburger && <div className={classNameHamburger}>
+			{isHamburgerVisible && <div className="header__wrapper_hamburger">
 				<p className="header__email_hamburger">{props.email}</p>
 				<Link
+				    to=""
 					className="header__link header__link_exit"
 					onClick={props.onHandleState}>
 					{props.linkState}
