@@ -28,6 +28,7 @@ function EditProfilePopup(props) {
     setName(currentUser.name);
     setDescription(currentUser.about);
   }, [currentUser]);
+  
   return (
     <PopupWithForm
       name="profile"

@@ -2,6 +2,7 @@ import React from "react";
 
 function ImagePopup(props) {
 
+  /*добавляет слушатель для закрытия по Esc только при открытии попапа*/ 
   React.useEffect(() => {
     props.escClose(props.isOpen);
   }, [props.isOpen, props.escClose])

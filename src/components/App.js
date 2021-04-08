@@ -19,35 +19,19 @@ import failImage from "../images/fail.svg";
 import * as auth from "../utils/auth.js";
 
 function App(props) {
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(
-    false
-  );
+  
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(
-    false
-  );
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({ link: "" });
   const [isPopupWithImageOpen, setIsPopupWithImageOpen] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState({
-    name: "",
-    about: "",
-    avatar: "",
-  });
+  const [currentUser, setCurrentUser] = React.useState({name: "", about: "", avatar: ""});
   const [cards, setCards] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const [buttonSave, setButtonSave] = React.useState({
-    isLoad: false,
-    buttonTitle: "Сохранить",
-  });
-  const [buttonAdd, setButtonAdd] = React.useState({
-    isLoad: false,
-    buttonTitle: "Создать",
-  });
-  const [buttonDelete, setButtonDelete] = React.useState({
-    isLoad: false,
-    buttonTitle: "Да",
-  });
+  const [buttonSave, setButtonSave] = React.useState({isLoad: false, buttonTitle: "Сохранить"});
+  const [buttonAdd, setButtonAdd] = React.useState({isLoad: false, buttonTitle: "Создать"});
+  const [buttonDelete, setButtonDelete] = React.useState({isLoad: false, buttonTitle: "Да"});
 
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [isButtonEdditProfile, setIsButtonEdditProfile] = React.useState(false);
@@ -280,7 +264,7 @@ function App(props) {
         handleLink={handleLink}
         isAuth={isAuth}
         loggedIn={loggedIn}
-        onSignIn={handleSignOut} />
+        onSignOut={handleSignOut} />
       <Switch>
         <ProtectedRoute
           exact="exact"

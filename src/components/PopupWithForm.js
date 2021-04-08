@@ -2,15 +2,18 @@ import React from "react";
 
 function PopupWithForm(props) {
 
+  const formRef = React.useRef();
   const children = props.children;
   const [buttonState, setButtonState] = React.useState(true);
-  const formRef = React.useRef();
 
+ /*добавляет слушатель для закрытия по Esc только при открытии попапа*/ 
   React.useEffect(() => {
     props.escClose(props.isOpen);
   }, [props.isOpen, props.escClose])
 
+  /*проверка полей формы на корректность для смены состояния кнопки(активна или нет)*/
   React.useEffect(() => {
+    /*если реф привязан к форме, и все поля формы валидны, и инпуты содержат символы помимо пробелов*/
     if (formRef.current && formRef.current.checkValidity() && Array.from(children).every((input) => input.props.value.trim() !== '')) {
       setButtonState(false);
       props.onButtonActive(false);

@@ -4,9 +4,11 @@ import { withRouter } from 'react-router-dom';
 
 function Login(props) {
 
+  /*переменные для управления инпутами*/
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
+   /*функции для смены значений переменых из стейта*/
   function handleEmail(e) {
     setEmail(e.target.value);
   }
@@ -15,6 +17,7 @@ function Login(props) {
     setPassword(e.target.value);
   }
 
+  /*отмена стандартного поведения + отправка введенных данных в инпуты на сервер*/
   function handleSubmit(e) {
     e.preventDefault();
     props.onLogin(email, password);

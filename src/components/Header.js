@@ -1,15 +1,13 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import {Hamburger} from './Hamburger';
+import { Hamburger } from './Hamburger';
 
 function Header(props) {
 
+  /*стейт для смены состояния названия элемента link*/
   const [linkState, setLinkState] = React.useState('');
 
-  function signOut() {
-    props.onSignIn();
-  }
-
+  /*проверка переменной для подстановки названия элемента Link*/
   function changeOfState() {
     if (props.isExit) {
       setLinkState('Выйти');
@@ -17,23 +15,29 @@ function Header(props) {
       setLinkState(props.isAuth ? 'Регистрация' : 'Войти')
     }
   }
-
+ 
+  /*функция меняет состояние элемента link*/
   function handleState() {
     if (props.isExit) {
-      signOut();
+      /*выход из профиля*/
+      props.onSignOut();
     } else {
+      /*установка первоначального значения в элемент link*/
       props.handleLink();
     }
   }
 
+  /*обработка для отображения или скрытия компонента Hamburger*/
   function handleHamburger() {
     props.onHamburger(!props.isHamburger);
   }
-  
+
+  /*функция вызывается при изменении пропсов*/
   React.useEffect(() => {
     changeOfState();
   }, [props.isExit, props.isAuth])
 
+  /*обработка состояния элемента link после перезагрузки страницы*/
   React.useEffect(() => {
     if (props.loggedIn) props.onExit(true)
   }, [props.loggedIn])

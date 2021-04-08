@@ -3,9 +3,12 @@ import InputForm from './InputForm';
 import { Link, withRouter } from 'react-router-dom';
 
 function Register(props) {
+
+  /*переменные для управления инпутами*/
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
+  /*функции для смены значений переменых из стейта*/
   function handleEmail(e) {
     setEmail(e.target.value);
   }
@@ -14,11 +17,13 @@ function Register(props) {
     setPassword(e.target.value);
   }
 
+  /*отмена стандартного поведения + отправка введенных данных в инпуты на сервер*/
   function handleSubmit(e) {
     e.preventDefault();
     props.onRegister(email, password);
   }
 
+  /*при монтировании контролирует название элемента link в компоненте Header*/
   React.useEffect(() => {
     if (props.isAuth) props.handleLink()
   }, [])

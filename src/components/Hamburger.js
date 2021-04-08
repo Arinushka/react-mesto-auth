@@ -10,7 +10,7 @@ export const Hamburger = (props) => {
 			{isHamburgerVisible && <div className="header__wrapper_hamburger">
 				<p className="header__email_hamburger">{props.email}</p>
 				<Link
-				    to=""
+					to=""
 					className="header__link header__link_exit"
 					onClick={props.onHandleState}>
 					{props.linkState}
