@@ -19,35 +19,38 @@ import failImage from "../images/fail.svg";
 import * as auth from "../utils/auth.js";
 
 function App(props) {
-  
+  /*стейты для открытия попапов*/
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({ link: "" });
   const [isPopupWithImageOpen, setIsPopupWithImageOpen] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState({name: "", about: "", avatar: ""});
+  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = React.useState(false);
+  const [isFailPopupOpen, setIsFailPopupOpen] = React.useState(false);
+  /*стейты для данных профиля и карточек*/
+  const [selectedCard, setSelectedCard] = React.useState({ link: "" });
+  const [currentUser, setCurrentUser] = React.useState({ name: "", about: "", avatar: "" });
   const [cards, setCards] = React.useState([]);
+  /*стейт для отображения загрузки данных*/
   const [loading, setLoading] = React.useState(false);
-  const [buttonSave, setButtonSave] = React.useState({isLoad: false, buttonTitle: "Сохранить"});
-  const [buttonAdd, setButtonAdd] = React.useState({isLoad: false, buttonTitle: "Создать"});
-  const [buttonDelete, setButtonDelete] = React.useState({isLoad: false, buttonTitle: "Да"});
-
+  /*стейты для контроля названия кнопок при отправке данных*/
+  const [buttonSave, setButtonSave] = React.useState({ isLoad: false, buttonTitle: "Сохранить" });
+  const [buttonAdd, setButtonAdd] = React.useState({ isLoad: false, buttonTitle: "Создать" });
+  const [buttonDelete, setButtonDelete] = React.useState({ isLoad: false, buttonTitle: "Да" });
+  /*стейт для проверки авторизован ли пользователь*/
   const [loggedIn, setLoggedIn] = React.useState(false);
+  /*стейты для контроля состояния кнопок при валидации*/
   const [isButtonEdditProfile, setIsButtonEdditProfile] = React.useState(false);
   const [isButtonAddPlace, setIsButtonAddPlace] = React.useState(false);
   const [isButtonAvatar, setIsButtonAvatar] = React.useState(false);
-  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = React.useState(false);
-  const [isFailPopupOpen, setIsFailPopupOpen] = React.useState(false);
+
+  /*стейты для контроля элемента link в компоненте Header*/
   const [isAuth, setIsAuth] = React.useState(true);
   const [exit, setExit] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [hamburger, setHamburger] = React.useState(false);
 
-  function handleButton(isLoad, buttonTitle, setState) {
-    setState({ isLoad: isLoad, buttonTitle: buttonTitle });
-  }
-
+  /*функции открытия попапов*/
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
@@ -68,6 +71,16 @@ function App(props) {
     setIsFailPopupOpen(true);
   }
 
+  function handleDeleteClick() {
+    setIsDeletePopupOpen(true);
+  }
+
+  function handleCardClick(card) {
+    setSelectedCard(card);
+    setIsPopupWithImageOpen(true);
+  }
+
+  /*функция закрытия попапов + удаления слушателя для закрытия на escape*/
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
@@ -78,38 +91,32 @@ function App(props) {
     setIsSuccessPopupOpen(false);
     document.removeEventListener("keydown", escClose);
   }
-
+  /*обработка нажатия на escape*/
   function escClose(evt) {
     if (evt.key === "Escape") {
       closeAllPopups();
     }
   }
-
+  /*функция закрытия на escape*/
   function handleEscClose(isOpen) {
     if (isOpen) {
       document.addEventListener("keydown", escClose);
     }
   }
 
+  /*функция закрытия на overlay*/
   function handleOverlayClose(evt) {
     if (evt.target.classList.contains("popup_opened")) {
       closeAllPopups();
     }
   }
 
-  function handleDeleteClick() {
-    setIsDeletePopupOpen(true);
+  /*функция, которая контролирует название кнопки сабмита формы*/
+  function handleButton(isLoad, buttonTitle, setState) {
+    setState({ isLoad: isLoad, buttonTitle: buttonTitle });
   }
 
-  function handleCardClick(card) {
-    setSelectedCard(card);
-    setIsPopupWithImageOpen(true);
-  }
-
-  function handleDeleteCard(card) {
-    setSelectedCard(card);
-  }
-
+  /*получение данных о пользователе и карточек + использование их на странице*/
   React.useEffect(() => {
     setLoading(true);
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -124,6 +131,7 @@ function App(props) {
       });
   }, []);
 
+  /*функция постановки лайка*/
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked)
@@ -137,6 +145,11 @@ function App(props) {
       });
   }
 
+  /*функции удаления карточки*/
+  function handleDeleteCard(card) {
+    setSelectedCard(card);
+  }
+
   function handleCardDelete(card) {
     handleButton(true, "Удаление...", setButtonDelete);
     api.deleteCard(card._id)
@@ -148,7 +161,7 @@ function App(props) {
         console.log(err);
       });
   }
-
+  /*обновление данных о пользователе*/
   function handleUpdateUser({ name, about }) {
     handleButton(true, "Сохранение...", setButtonSave);
     api.setUserInfo(name, about)
@@ -174,7 +187,7 @@ function App(props) {
         console.log(err);
       });
   }
-
+  /*добавление новой карточки*/
   function handleAddPlace({ name, link }) {
     handleButton(true, "Создание...", setButtonAdd);
     api.addCard(name, link)
@@ -187,7 +200,7 @@ function App(props) {
         console.log(err);
       });
   }
-
+  /*проверка токена для авторизованного пользователя*/
   function handleTokenCheck() {
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
@@ -206,10 +219,15 @@ function App(props) {
     }
   }
 
+  React.useEffect(() => {
+    handleTokenCheck();
+  }, []);
+
+  /*контроль названия элемента link в компоненте Header*/
   function handleLink() {
     setIsAuth(!isAuth);
   }
-
+  /*авторизация пользователя*/
   function handleLogin(email, password) {
     auth.authorize(email, password)
       .then((res) => {
@@ -225,7 +243,7 @@ function App(props) {
       }
       );
   }
-
+  /*регистрация пользователя*/
   function handleRegister(email, password) {
     auth.register(email, password)
       .then((res) => {
@@ -238,7 +256,7 @@ function App(props) {
       }
       );
   }
-
+  /*обработка выхода пользователя из профиля*/
   function handleSignOut() {
     localStorage.removeItem('token');
     props.history.push('/sign-in');
@@ -248,10 +266,6 @@ function App(props) {
     console.log(props.loggedIn);
     setHamburger(false);
   }
-
-  React.useEffect(() => {
-    handleTokenCheck();
-  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

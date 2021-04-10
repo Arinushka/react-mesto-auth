@@ -4,10 +4,14 @@ import InputForm from './InputForm';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function EditProfilePopup(props) {
-  const [name, setName] = React.useState('');
-  const [description, setDescription] = React.useState('');
+
   const currentUser = React.useContext(CurrentUserContext);
 
+  /*переменные для управления инпутами*/
+  const [name, setName] = React.useState('');
+  const [description, setDescription] = React.useState('');
+
+  /*функции для смены значений переменых из стейта*/
   function handleName(e) {
     setName(e.target.value);
   }
@@ -16,6 +20,7 @@ function EditProfilePopup(props) {
     setDescription(e.target.value);
   }
 
+  /*отмена стандартного поведения + отправка введенных данных в инпуты на сервер*/
   function handleSubmit(e) {
     e.preventDefault();
     props.onUpdateUser({
@@ -24,6 +29,7 @@ function EditProfilePopup(props) {
     });
   }
 
+  /*установка данных профиля*/
   React.useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);

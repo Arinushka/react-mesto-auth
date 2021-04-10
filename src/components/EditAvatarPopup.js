@@ -3,12 +3,16 @@ import PopupWithForm from './PopupWithForm';
 import InputForm from './InputForm';
 
 function EditAvatarPopup(props) {
+
+  /*переменная для управления инпутом*/
   const [avatar, setAvatar] = React.useState('');
 
+  /*функция для смены значения переменной из стейта*/
   function handleAvatar(e) {
     setAvatar(e.target.value);
   }
 
+  /*отмена стандартного поведения + отправка введенных данных в инпут на сервер*/
   function handleSubmit(e) {
     e.preventDefault();
     props.onUpdateAvatar({

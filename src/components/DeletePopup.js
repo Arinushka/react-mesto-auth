@@ -2,13 +2,14 @@ import React from 'react';
 
 function DeletePopup(props) {
 
-
+/*отмена стандартного поведения + удаление карточки + закрытия попапа*/
   function handleSubmit(e) {
     e.preventDefault();
     props.onCardDelete(props.card);
     props.onClose();
   }
 
+  /*добавляет слушатель для закрытия по Esc только при открытии попапа*/ 
   React.useEffect(() => {
     props.escClose(props.isOpen);
   }, [props.isOpen, props.escClose])

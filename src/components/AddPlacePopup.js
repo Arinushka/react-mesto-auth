@@ -4,9 +4,12 @@ import PopupWithForm from './PopupWithForm';
 
 
 function AddPlacePopup(props) {
+
+  /*переменные для управления инпутами*/
   const [name, setName] = React.useState('');
   const [link, setLink] = React.useState('');
 
+  /*функции для смены значений переменых из стейта*/
   function handleName(e) {
     setName(e.target.value);
   }
@@ -15,6 +18,7 @@ function AddPlacePopup(props) {
     setLink(e.target.value);
   }
 
+  /*отмена стандартного поведения + отправка введенных данных в инпуты на сервер*/
   function handleSubmit(e) {
     e.preventDefault();
     props.onAddPlace({
@@ -23,6 +27,7 @@ function AddPlacePopup(props) {
     });
   }
 
+  /*очистка инпутов*/
   React.useEffect(() => {
     setName('');
     setLink('');
